@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Daily LP — Today's Leadership Principle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0a;
+    --paper: #f4f1ea;
+    --rule: #1a1a1a;
+    --accent: #ff6a00;
+    --muted: #6b6b66;
+    --done: #2d6a4f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--paper); color: var(--ink); font-family: 'Bricolage Grotesque', serif; }
+  body {
+    min-height: 100vh;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(0,0,0,0.025) 0 1px, transparent 1px 28px),
+      repeating-linear-gradient(90deg, rgba(0,0,0,0.025) 0 1px, transparent 1px 28px);
+    padding: 20px 16px 60px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; }
+
+  header.top {
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 10px; margin-bottom: 18px;
+  }
+  .brand {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  }
+  .brand b { background: var(--ink); color: var(--paper); padding: 2px 6px; }
+  .date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .stamp {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    border: 1.5px solid var(--accent); color: var(--accent);
+    padding: 4px 8px; margin-bottom: 18px;
+    transform: rotate(-1.5deg);
+  }
+
+  h1.principle {
+    font-family: 'Bricolage Grotesque', serif;
+    font-weight: 800;
+    font-size: clamp(40px, 10vw, 78px);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 14px;
+  }
+  h1.principle .num {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; font-weight: 400;
+    letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .blurb {
+    font-size: 16px; line-height: 1.55;
+    border-left: 3px solid var(--ink);
+    padding: 4px 0 4px 14px;
+    margin-bottom: 28px;
+    color: #2a2a2a;
+  }
+
+  .challenge-card {
+    border: 2px solid var(--ink);
+    background: #fff;
+    padding: 22px 20px;
+    box-shadow: 6px 6px 0 var(--ink);
+    margin-bottom: 22px;
+    position: relative;
+  }
+  .challenge-card::before {
+    content: "TODAY'S CHALLENGE";
+    position: absolute; top: -10px; left: 14px;
+    background: var(--paper); padding: 0 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.22em;
+  }
+  .challenge-text {
+    font-size: 19px; line-height: 1.45; font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .why {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed #bbb;
+    font-size: 13px; color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1.5;
+  }
+
+  .actions {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    margin-bottom: 30px;
+  }
+  button {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 12px 16px;
+    border: 2px solid var(--ink); background: var(--paper);
+    color: var(--ink); cursor: pointer;
+    transition: transform 0.08s ease, background 0.15s ease;
+    font-weight: 600;
+  }
+  button:hover { transform: translate(-2px, -2px); box-shadow: 2px 2px 0 var(--ink); }
+  button:active { transform: translate(0,0); box-shadow: none; }
+  button.primary { background: var(--ink); color: var(--paper); }
+  button.primary:hover { background: var(--accent); border-color: var(--accent); box-shadow: 2px 2px 0 var(--ink); }
+  button.done { background: var(--done); color: #fff; border-color: var(--done); }
+
+  footer {
+    margin-top: 40px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em;
+    color: var(--muted); text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><b>DAILY</b> LEADERSHIP PRINCIPLE</div>
+    <div class="date" id="dateLabel">—</div>
+  </header>
+
+  <div class="stamp" id="stamp">DAY 001 / NEW</div>
+  <h1 class="principle"><span class="num" id="lpNum">PRINCIPLE 01</span><span id="lpName">—</span></h1>
+  <div class="blurb" id="lpBlurb">—</div>
+
+  <div class="challenge-card">
+    <div class="challenge-text" id="challengeText">—</div>
+    <div class="why" id="whyText">—</div>
+  </div>
+
+  <div class="actions">
+    <button id="doneBtn">✓ Mark Done</button>
+    <button id="resetBtn" title="View tomorrow's preview">↻ Shuffle</button>
+  </div>
+
+  <footer>
+    BOOKMARK THIS PAGE · CHECK IT EVERY MORNING
+  </footer>
+</div>
+
+
+<script>
+const PRINCIPLES = [
+  {
+    name: "Customer Obsession",
+    blurb: "Leaders start with the customer and work backwards. They work vigorously to earn and keep customer trust.",
+    challenges: [
+      { c: "Talk to one actual customer or end-user today. Ask: 'What's the most frustrating part of your week with our product?'", w: "Real signal beats internal opinion every time." },
+      { c: "Write down the last decision you made. Ask: would the customer applaud this, shrug, or be confused? If not applaud, revisit it.", w: "Forces working backwards from the customer." },
+      { c: "Read 5 pieces of customer feedback (reviews, support tickets, NPS comments). Identify one recurring theme.", w: "Patterns hide in volume." }
+    ]
+  },
+  {
+    name: "Ownership",
+    blurb: "Leaders are owners. They think long term and don't sacrifice long-term value for short-term results. They never say 'that's not my job.'",
+    challenges: [
+      { c: "Find one thing today that's broken or sloppy but technically 'not your job.' Fix it or escalate it with a proposed solution.", w: "Owners close gaps; renters report them." },
+      { c: "Identify a decision you've been deferring to someone else. Make a recommendation today instead of just asking.", w: "Recommendations show ownership; questions defer it." },
+      { c: "List 3 things in your project that would still matter in 2 years. Spend your best hour on one of them.", w: "Long-term thinking is a muscle." }
+    ]
+  },
+  {
+    name: "Invent and Simplify",
+    blurb: "Leaders expect and require innovation and invention from their teams and always find ways to simplify.",
+    challenges: [
+      { c: "Take a process you do regularly and remove one step. If nothing breaks in a week, the step was waste.", w: "Simplification by subtraction." },
+      { c: "Write down a problem you're solving in one sentence. If it takes more than one, the problem isn't clear yet.", w: "Clarity precedes invention." },
+      { c: "Pitch one 'crazy' idea to a colleague today, even if you're not sure about it. Note their reaction.", w: "Invention requires being willing to look foolish." }
+    ]
+  },
+  {
+    name: "Are Right, A Lot",
+    blurb: "Leaders have strong judgment and good instincts. They seek diverse perspectives and work to disconfirm their beliefs.",
+    challenges: [
+      { c: "Pick a strong opinion you hold about your work. Spend 10 minutes writing the strongest case AGAINST it.", w: "Steel-manning the opposite tests your judgment." },
+      { c: "Ask one person whose perspective differs from yours: 'What am I missing?' Don't defend — just listen and write it down.", w: "Diverse input sharpens instinct." },
+      { c: "Review a recent decision that didn't work out. Was the decision wrong, or just the outcome? Distinguish the two.", w: "Good decisions can have bad outcomes — learn the difference." }
+    ]
+  },
+  {
+    name: "Learn and Be Curious",
+    blurb: "Leaders are never done learning and always seek to improve themselves. They are curious about new possibilities and act to explore them.",
+    challenges: [
+      { c: "Spend 20 minutes learning something adjacent to your work — not directly useful, just interesting. Note what surprised you.", w: "Adjacent knowledge creates non-obvious connections." },
+      { c: "Find someone at work who does something you don't understand. Ask them to explain it for 10 minutes.", w: "Curiosity scales when you actually ask." },
+      { c: "Read one thing today outside your normal feed — a different industry, a different country, a different decade.", w: "Breaks the algorithm's grip on your thinking." }
+    ]
+  },
+  {
+    name: "Hire and Develop the Best",
+    blurb: "Leaders raise the performance bar with every hire and promotion. They recognize exceptional talent and willingly move them throughout the organization.",
+    challenges: [
+      { c: "Give one piece of specific, useful feedback to a colleague today — the kind you'd want to receive.", w: "Development happens in small moments, not annual reviews." },
+      { c: "Identify someone on your team who's ready for more. Tell them what you see — and what would unlock the next level.", w: "People rise to expectations they can hear." },
+      { c: "Think about the last person you hired or worked with closely. Did they raise the bar? If not, what would you do differently next time?", w: "Hiring is the highest-leverage decision you make." }
+    ]
+  },
+  {
+    name: "Insist on the Highest Standards",
+    blurb: "Leaders have relentlessly high standards — many people may think these standards are unreasonably high. Leaders are continually raising the bar.",
+    challenges: [
+      { c: "Find one piece of work you 'shipped' recently that you're 80% happy with. Spend 30 minutes making it 95%.", w: "The last 15% is where standards live." },
+      { c: "Identify something on your team that everyone tolerates but nobody loves. Name it out loud today.", w: "Naming mediocrity is the first step to fixing it." },
+      { c: "Before sending your next email or doc, ask: 'Would I be proud if this were forwarded to my CEO?' Edit accordingly.", w: "Standards are revealed under hypothetical scrutiny." }
+    ]
+  },
+  {
+    name: "Think Big",
+    blurb: "Thinking small is a self-fulfilling prophecy. Leaders create and communicate a bold direction that inspires results.",
+    challenges: [
+      { c: "Take your current goal and 10x it. What would you do differently if you HAD to hit the bigger number?", w: "10x thinking surfaces non-incremental moves." },
+      { c: "Describe what your project looks like 3 years from now if it's wildly successful. Share it with one person today.", w: "Bold visions need to be spoken to be real." },
+      { c: "Identify the smallest version of your current work and the largest. Are you defaulting to the small one out of habit?", w: "Most people anchor too low without realizing." }
+    ]
+  },
+  {
+    name: "Bias for Action",
+    blurb: "Speed matters in business. Many decisions and actions are reversible and do not need extensive study.",
+    challenges: [
+      { c: "Pick a decision you've been mulling for more than 3 days. If it's reversible, make it today — even imperfectly.", w: "Two-way doors don't deserve weeks of analysis." },
+      { c: "Send the email or message you've been drafting in your head. The version that exists beats the version that's perfect.", w: "Action creates information; deliberation just creates anxiety." },
+      { c: "In your next meeting, when someone says 'we should look into that,' propose a 24-hour deadline for a first answer.", w: "Vague timelines kill momentum." }
+    ]
+  },
+  {
+    name: "Frugality",
+    blurb: "Accomplish more with less. Constraints breed resourcefulness, self-sufficiency, and invention.",
+    challenges: [
+      { c: "Solve a problem today using only tools you already have. No new software, no new hire, no new budget.", w: "Constraints force creativity." },
+      { c: "Look at your team's biggest expense. Ask: if we had half the budget, what would we cut and what would we keep?", w: "Forced trade-offs reveal what actually matters." },
+      { c: "Find one recurring cost (subscription, meeting, process) and ask whether it still earns its keep. Cut it if not.", w: "Frugality is a habit, not a policy." }
+    ]
+  },
+  {
+    name: "Earn Trust",
+    blurb: "Leaders listen attentively, speak candidly, and treat others respectfully. They benchmark themselves against the best.",
+    challenges: [
+      { c: "Admit one mistake out loud today — to your team, your manager, or yourself in writing. No 'but' clauses.", w: "Trust compounds when you take responsibility cleanly." },
+      { c: "In your next 1:1, ask 'What's something you've been hesitant to tell me?' Then just listen.", w: "Trust requires invitation; it rarely volunteers." },
+      { c: "Give credit publicly to someone today for something they did. Specific, not generic.", w: "Specific credit is the currency of trust." }
+    ]
+  },
+  {
+    name: "Dive Deep",
+    blurb: "Leaders operate at all levels, stay connected to the details, audit frequently, and are skeptical when metrics and anecdote differ.",
+    challenges: [
+      { c: "Pick one metric your team tracks. Trace it back to the raw data. Does the number actually mean what you think it means?", w: "Dashboards lie when nobody checks the plumbing." },
+      { c: "Spend 30 minutes today in the actual product/code/process — not the summary of it. Look for one thing that surprises you.", w: "Surprises live in the details, not the summary." },
+      { c: "Find a recent anecdote that contradicts your team's metrics. Investigate which one is wrong.", w: "Anecdote vs. data conflict is signal, not noise." }
+    ]
+  },
+  {
+    name: "Have Backbone; Disagree and Commit",
+    blurb: "Leaders are obligated to respectfully challenge decisions when they disagree, even when doing so is uncomfortable. Once a decision is determined, they commit wholly.",
+    challenges: [
+      { c: "Identify a decision in your org you privately disagree with. Voice it once, clearly, to the right person — then either commit or escalate.", w: "Silent disagreement is the most expensive kind." },
+      { c: "In your next meeting, if you find yourself nodding along to something you don't believe — say so. Politely but plainly.", w: "Backbone is a small-moments practice." },
+      { c: "Think about a decision you 'committed' to but are still quietly resisting. Either re-open it formally or fully commit today.", w: "Half-commitment is its own kind of dishonesty." }
+    ]
+  },
+  {
+    name: "Deliver Results",
+    blurb: "Leaders focus on the key inputs for their business and deliver them with the right quality and in a timely fashion. Despite setbacks, they rise to the occasion and never settle.",
+    challenges: [
+      { c: "Identify the ONE result that matters most this week. Cut or defer everything that doesn't directly serve it.", w: "Focus is what gets shipped." },
+      { c: "Look at your week. What did you finish vs. what did you work on? The gap is the lesson.", w: "Activity isn't achievement." },
+      { c: "Find a stuck project and identify the single blocker. Remove it today, or escalate it today. Don't 'follow up next week.'", w: "Delivery is a series of unblockings." }
+    ]
+  },
+  {
+    name: "Strive to be Earth's Best Employer",
+    blurb: "Leaders work every day to create a safer, more productive, higher-performing, more diverse, and more just work environment.",
+    challenges: [
+      { c: "Notice one thing about your work environment that's quietly unfair or frustrating. Suggest a fix today.", w: "Culture is built by people who notice." },
+      { c: "Thank someone today for invisible work — the stuff that keeps things running but never makes the highlight reel.", w: "Recognition of invisible labor changes culture fast." },
+      { c: "Ask a junior colleague: 'What's something we do here that doesn't make sense to you?' Listen without defending.", w: "Fresh eyes see what familiar ones miss." }
+    ]
+  },
+  {
+    name: "Success and Scale Bring Broad Responsibility",
+    blurb: "We must be humble and thoughtful about even the secondary effects of our actions. We need to be better every day.",
+    challenges: [
+      { c: "Think about a recent decision your team made. List one second-order consequence — for users, partners, or society — that nobody discussed.", w: "Second-order effects are where impact actually lives." },
+      { c: "Identify one thing your work makes worse for someone, even unintentionally. Sit with it. Then think about what you could change.", w: "Honesty about externalities is the start of responsibility." },
+      { c: "Do one small thing today that you'd be proud of even if nobody at work ever noticed.", w: "Character is what you do without an audience." }
+    ]
+  }
+];
+
+// --- Deterministic daily selection ---
+function dayIndex(date) {
+  // Days since 2024-01-01 — same number worldwide for the same calendar day in user's locale.
+  const epoch = new Date(2024, 0, 1);
+  const diff = Math.floor((date - epoch) / (1000 * 60 * 60 * 24));
+  return diff;
+}
+
+function todaysContent(offset = 0) {
+  const d = new Date();
+  d.setDate(d.getDate() + offset);
+  const idx = dayIndex(d);
+  const principle = PRINCIPLES[idx % PRINCIPLES.length];
+  const challenge = principle.challenges[idx % principle.challenges.length];
+  const principleNum = (PRINCIPLES.indexOf(principle) + 1).toString().padStart(2, '0');
+  return { date: d, principle, challenge, principleNum, idx };
+}
+
+const state = {
+  completions: new Set(),
+  shuffleOffset: 0
+};
+
+function dateKey(d) {
+  return d.toISOString().slice(0, 10);
+}
+
+// --- Render ---
+function render() {
+  const { date, principle, challenge, principleNum } = todaysContent(state.shuffleOffset);
+  const dateStr = date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+  document.getElementById('dateLabel').textContent = dateStr.toUpperCase();
+  document.getElementById('lpName').textContent = principle.name.toUpperCase();
+  document.getElementById('lpNum').textContent = `PRINCIPLE ${principleNum} OF 16`;
+  document.getElementById('lpBlurb').textContent = principle.blurb;
+  document.getElementById('challengeText').textContent = challenge.c;
+  document.getElementById('whyText').textContent = `WHY → ${challenge.w}`;
+
+  const isDone = state.completions.has(dateKey(new Date())) && state.shuffleOffset === 0;
+  const doneBtn = document.getElementById('doneBtn');
+  if (isDone) {
+    doneBtn.textContent = '✓ Done Today';
+    doneBtn.classList.add('done');
+  } else {
+    doneBtn.textContent = '✓ Mark Done';
+    doneBtn.classList.remove('done');
+  }
+
+  const stamp = document.getElementById('stamp');
+  if (state.shuffleOffset !== 0) {
+    stamp.textContent = state.shuffleOffset > 0 ? `+${state.shuffleOffset} DAYS / PREVIEW` : `${state.shuffleOffset} DAYS / ARCHIVE`;
+  } else {
+    stamp.textContent = `TODAY / ${dateStr.toUpperCase()}`;
+  }
+}
+
+document.getElementById('doneBtn').addEventListener('click', () => {
+  const key = dateKey(new Date());
+  if (state.completions.has(key)) {
+    state.completions.delete(key);
+  } else {
+    state.completions.add(key);
+  }
+  render();
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  state.shuffleOffset = state.shuffleOffset === 0 ? 1 : 0;
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
