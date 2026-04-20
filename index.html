@@ -3,7 +3,27 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Daily LP — Today's Leadership Principle</title>
+<title>Daily LP — Today's Leadership Principle · Steven Armenta</title>
+<meta name="author" content="Steven Armenta" />
+<meta name="description" content="A daily leadership principle challenge built by Steven Armenta. Each day surfaces one of 16 leadership principles with a concrete action to practice it." />
+<link rel="canonical" href="https://stevenarmenta1.github.io/daily-leadership-principle/" />
+<meta property="og:title" content="Daily LP — Today's Leadership Principle" />
+<meta property="og:description" content="A daily leadership principle challenge built by Steven Armenta." />
+<meta property="og:url" content="https://stevenarmenta1.github.io/daily-leadership-principle/" />
+<meta property="og:type" content="website" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Daily LP — Today's Leadership Principle",
+  "url": "https://stevenarmenta1.github.io/daily-leadership-principle/",
+  "author": {
+    "@type": "Person",
+    "name": "Steven Armenta",
+    "url": "https://github.com/stevenarmenta1"
+  }
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -149,12 +169,13 @@
   </div>
 
   <div class="actions">
-    <button id="doneBtn">✓ Mark Done</button>
-    <button id="resetBtn" title="View tomorrow's preview">↻ Shuffle</button>
+<button id="prevBtn">← Prev</button>
+<button id="todayBtn" class="primary">↺ Today</button>
   </div>
 
   <footer>
-    BOOKMARK THIS PAGE · CHECK IT EVERY MORNING
+    BOOKMARK THIS PAGE · CHECK IT EVERY MORNING<br>
+    <span style="margin-top:6px;display:inline-block;">BUILT BY STEVEN ARMENTA</span>
   </footer>
 </div>
 
@@ -307,32 +328,32 @@ const PRINCIPLES = [
   }
 ];
 
-// --- Deterministic daily selection ---
+// --- Seeded random: same day = same result for everyone ---
+function seededRandom(seed) {
+  const x = Math.sin(seed * 9301 + 49297) * 233280;
+  return x - Math.floor(x);
+}
+
 function dayIndex(date) {
-  // Days since 2024-01-01 — same number worldwide for the same calendar day in user's locale.
   const epoch = new Date(2024, 0, 1);
-  const diff = Math.floor((date - epoch) / (1000 * 60 * 60 * 24));
-  return diff;
+  return Math.floor((date - epoch) / (1000 * 60 * 60 * 24));
 }
 
 function todaysContent(offset = 0) {
   const d = new Date();
   d.setDate(d.getDate() + offset);
   const idx = dayIndex(d);
-  const principle = PRINCIPLES[idx % PRINCIPLES.length];
-  const challenge = principle.challenges[idx % principle.challenges.length];
-  const principleNum = (PRINCIPLES.indexOf(principle) + 1).toString().padStart(2, '0');
+  const principleIdx = Math.floor(seededRandom(idx) * PRINCIPLES.length);
+  const principle = PRINCIPLES[principleIdx];
+  const challengeIdx = Math.floor(seededRandom(idx + 9999) * principle.challenges.length);
+  const challenge = principle.challenges[challengeIdx];
+  const principleNum = (principleIdx + 1).toString().padStart(2, '0');
   return { date: d, principle, challenge, principleNum, idx };
 }
 
 const state = {
-  completions: new Set(),
   shuffleOffset: 0
 };
-
-function dateKey(d) {
-  return d.toISOString().slice(0, 10);
-}
 
 // --- Render ---
 function render() {
@@ -345,36 +366,20 @@ function render() {
   document.getElementById('challengeText').textContent = challenge.c;
   document.getElementById('whyText').textContent = `WHY → ${challenge.w}`;
 
-  const isDone = state.completions.has(dateKey(new Date())) && state.shuffleOffset === 0;
-  const doneBtn = document.getElementById('doneBtn');
-  if (isDone) {
-    doneBtn.textContent = '✓ Done Today';
-    doneBtn.classList.add('done');
-  } else {
-    doneBtn.textContent = '✓ Mark Done';
-    doneBtn.classList.remove('done');
-  }
-
   const stamp = document.getElementById('stamp');
-  if (state.shuffleOffset !== 0) {
-    stamp.textContent = state.shuffleOffset > 0 ? `+${state.shuffleOffset} DAYS / PREVIEW` : `${state.shuffleOffset} DAYS / ARCHIVE`;
-  } else {
-    stamp.textContent = `TODAY / ${dateStr.toUpperCase()}`;
-  }
+  stamp.textContent = state.shuffleOffset === 0 ? `TODAY / ${dateStr.toUpperCase()}` : dateStr.toUpperCase();
+
+  document.getElementById('todayBtn').style.display = state.shuffleOffset !== 0 ? 'inline-block' : 'none';
 }
 
-document.getElementById('doneBtn').addEventListener('click', () => {
-  const key = dateKey(new Date());
-  if (state.completions.has(key)) {
-    state.completions.delete(key);
-  } else {
-    state.completions.add(key);
-  }
+document.getElementById('prevBtn').addEventListener('click', () => {
+  state.shuffleOffset -= 1;
   render();
 });
 
-document.getElementById('resetBtn').addEventListener('click', () => {
-  state.shuffleOffset = state.shuffleOffset === 0 ? 1 : 0;
+
+document.getElementById('todayBtn').addEventListener('click', () => {
+  state.shuffleOffset = 0;
   render();
 });
 
